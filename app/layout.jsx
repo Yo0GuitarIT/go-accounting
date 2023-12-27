@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={inter.className}>
           <Header />
-          <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <main className="flex min-h-screen flex-col items-center justify-between p-24 text-center">
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </main>
         </body>
