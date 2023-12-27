@@ -1,9 +1,10 @@
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
+import { getFirestore } from "firebase/firestore";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { app } from "../../lib/firebaseConfig";
+import {app} from "../../lib/firebaseConfig"
 
 function TestPage() {
   const { getToken } = useAuth();

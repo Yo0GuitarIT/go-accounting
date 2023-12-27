@@ -6,7 +6,7 @@ export function Header() {
 
   return (
     <nav className="w-full h-16 bg-blue-500 flex justify-center">
-      <div className="container flex justify-between items-center">
+      <div className="container flex justify-between items-center px-2">
         <Link href="/" className="text-white text-xl font-bold">
           Go Accounting
         </Link>
