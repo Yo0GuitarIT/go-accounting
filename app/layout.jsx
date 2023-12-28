@@ -1,3 +1,4 @@
+import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import { Header } from "../components/Header";
@@ -14,12 +15,24 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <Header />
-          <main className="flex min-h-screen flex-col items-center justify-between p-24 text-center">
-            <Suspense fallback={<Loading />}>{children}</Suspense>
-          </main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className="flex text-center container">
+              <div
+                className="flex flex-col justify-center items-cente w-screen"
+                style={{ height: "calc(100vh - 80px)" }}
+              >
+                <Suspense fallback={<Loading />}>{children}</Suspense>
+              </div>
+            </main>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

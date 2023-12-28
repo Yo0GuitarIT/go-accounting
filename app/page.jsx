@@ -1,17 +1,11 @@
-import Link from "next/link"
-
+import StartedButton from "../components/StartedButton";
 function Home() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold ">Welcome</h1>
-      <p className="mb-5">Demo by next.js & clerk</p>
-      <Link href="/main" className="hover:text-rose-600 mr-5">
-        Get Started
-      </Link>
-      <Link href="/test" className="hover:text-rose-600">
-        Test
-      </Link>
-    </div>
+    < >
+      <h1 className="text-5xl font-bold ">Streamline Your Finances with Precision and Ease</h1>
+      <p className="mb-5 text-gray-500">Tool by Next, Clerk, Firebase</p>
+      <StartedButton />
+    </>
   );
 }
 
