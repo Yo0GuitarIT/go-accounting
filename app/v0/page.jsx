@@ -1,78 +1,45 @@
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import {
-  CardContent,
-  Card,
-  CardDescription,
-  CardTitle,
-} from "../../components/ui/card";
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "../../components/ui/table";
-import { Trash } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import EnterTransactions from "../../components/EnterTranscations";
+import Summary from "../../components/Summary";
+import Reports from "../../components/Reports";
 
 function Component() {
+  const [summary, setSummary] = useState({
+    totalTransactions: 0,
+    totalAmount: 0,
+  });
+
+  const transactions = [
+    {
+      id: "001",
+      date: "Dec 29, 2023, 1:57 AM",
+      title: "Tickets",
+      amount: 1000,
+      transactionType: "income",
+    },
+    {
+      id: "002",
+      date: "Dec 27,2023",
+      title: "Tickets",
+      amount: 1000,
+      transactionType: "expense",
+    },
+  ];
+
+  const handleFormSubmit = (format) => {
+    console.log("Received format in parent:", format);
+  };
+
   return (
-    <>
-      <main className="flex flex-col gap-6 p-6">
-        <h2 className="text-xl font-semibold">Enter Transactions</h2>
-        <Card>
-          <CardContent>
-            <form className="grid gap-4 pt-6">
-              <Input className="w-full" placeholder="Title" type="text" />
-              <Input className="w-full" placeholder="Amount" type="text" />
-              <Button type="submit">Add Transaction</Button>
-            </form>
-          </CardContent>
-        </Card>
-        <h2 className="text-xl font-semibold">Summary</h2>
-        <Card>
-          <CardContent className="flex gap-4 pt-6">
-            <div>
-              <CardDescription>Total Transactions</CardDescription>
-              <CardTitle>10</CardTitle>
-            </div>
-            <div>
-              <CardDescription>Total Amount</CardDescription>
-              <CardTitle>$5000.00</CardTitle>
-            </div>
-          </CardContent>
-        </Card>
-        <h2 className="text-xl font-semibold">Reports</h2>
-        <Card>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Dec 28, 2023</TableCell>
-                  <TableCell>Payment</TableCell>
-                  <TableCell>$500.00</TableCell>
-                  <TableCell className="text-right">
-                    <Button size="icon" variant="destructive">
-                      <Trash strokeWidth={1} size={24} className="text-white" />
-                      <span className="sr-only">Delete</span>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </main>
-    </>
+    <main className="h-full w-full flex flex-col gap-6 pb-6">
+      <h2 className="text-xl font-semibold text-left">Enter Transactions</h2>
+
+      <EnterTransactions onFormSubmit={handleFormSubmit} />
+      <Summary summary={summary} />
+      <Reports transactions={transactions} />
+    </main>
   );
 }
 

@@ -25,12 +25,7 @@ export default function RootLayout({ children }) {
           >
             <Header />
             <main className="flex text-center container">
-              <div
-                className="flex flex-col justify-center items-cente w-screen"
-                style={{ height: "calc(100vh - 80px)" }}
-              >
-                <Suspense fallback={<Loading />}>{children}</Suspense>
-              </div>
+              <Suspense fallback={<Loading />}>{children}</Suspense>
             </main>
           </ThemeProvider>
         </body>
