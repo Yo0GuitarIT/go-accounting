@@ -2,6 +2,7 @@ import { ThemeProvider } from "../components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import { Header } from "../components/Header";
+import { Toaster } from "../components/ui/sonner";
 import { Suspense } from "react";
 import Loading from "./loading";
 import "./globals.css";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
             <main className="flex text-center container">
               <Suspense fallback={<Loading />}>{children}</Suspense>
             </main>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

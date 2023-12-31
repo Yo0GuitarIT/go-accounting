@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CardContent, Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
+
 import {
   Select,
   SelectContent,
@@ -36,10 +38,21 @@ function EnterTransitions({ onFormSubmit }) {
       minute: "numeric",
       hour12: false,
     };
-
     const currentDateTime = new Date().toLocaleString("en-US", options);
     return currentDateTime;
   };
+
+  const getIDandDate = () => {
+    const transactionID = generateRandomId();
+    const currentDate = getCurrentDateWithTime();
+    return { transactionID, currentDate };
+  };
+
+  useEffect(() => {
+    const { transactionID, currentDate } = getIDandDate();
+    setFormat({ ...format, id: transactionID, date: currentDate });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleTransactionType = (value) =>
     setFormat({ ...format, transactionType: value });
@@ -47,20 +60,38 @@ function EnterTransitions({ onFormSubmit }) {
   const handleAmount = (value) => setFormat({ ...format, amount: value });
 
   const handleSubmit = (event) => {
+    toast("Event has been created", {
+      description: `${format.title} - ${format.amount} has been recorded`,
+      // action: {
+      //   label: "Undo",
+      //   onClick: () => console.log("Undo"),
+      // },
+    });
     event.preventDefault();
-    const transactionID = generateRandomId();
-    const currentDate = getCurrentDateWithTime();
-
-    setFormat({ ...format, id: transactionID, date: currentDate });
-
     onFormSubmit(format);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    const { transactionID, currentDate } = getIDandDate();
+    setFormat({
+      ...format,
+      id: transactionID,
+      date: currentDate,
+      title: "",
+      amount: "",
+      transactionType: "",
+    });
   };
 
   return (
     <Card>
       <CardContent>
         <form className="grid gap-4 pt-6">
-          <Select onValueChange={(value) => handleTransactionType(value)}>
+          <Select
+            onValueChange={(value) => handleTransactionType(value)}
+            value={format.transactionType}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select Transaction Type" />
             </SelectTrigger>
@@ -73,12 +104,14 @@ function EnterTransitions({ onFormSubmit }) {
             className="w-full"
             placeholder="Title"
             type="text"
+            value={format.title}
             onChange={(event) => handleTitle(event.target.value)}
           />
           <Input
             className="w-full"
             placeholder="Amount"
             type="text"
+            value={format.amount}
             onChange={(event) => handleAmount(event.target.value)}
           />
           <Button type="submit" onClick={handleSubmit}>

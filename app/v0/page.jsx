@@ -11,7 +11,7 @@ function Component() {
     totalAmount: 0,
   });
 
-  const transactions = [
+  const [transactions, setTransactions] = useState([
     {
       id: "001",
       date: "Dec 29, 2023, 1:57 AM",
@@ -26,10 +26,11 @@ function Component() {
       amount: 1000,
       transactionType: "expense",
     },
-  ];
+  ]);
 
   const handleFormSubmit = (format) => {
     console.log("Received format in parent:", format);
+    setTransactions([...transactions, format]);
   };
 
   return (
