@@ -1,16 +1,10 @@
 "use client";
-
 import { useState } from "react";
 import EnterTransactions from "../../components/EnterTranscations";
 import Summary from "../../components/Summary";
 import Reports from "../../components/Reports";
 
 function Component() {
-  const [summary, setSummary] = useState({
-    totalTransactions: 0,
-    totalAmount: 0,
-  });
-
   const [transactions, setTransactions] = useState([
     {
       id: "001",
@@ -23,10 +17,17 @@ function Component() {
       id: "002",
       date: "Dec 27,2023",
       title: "Tickets",
-      amount: 1000,
+      amount: 500,
       transactionType: "expense",
     },
   ]);
+
+  const handleDelete = (id) => {
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction.id !== id
+    );
+    setTransactions(updatedTransactions);
+  };
 
   const handleFormSubmit = (format) => {
     console.log("Received format in parent:", format);
@@ -38,8 +39,8 @@ function Component() {
       <h2 className="text-xl font-semibold text-left">Enter Transactions</h2>
 
       <EnterTransactions onFormSubmit={handleFormSubmit} />
-      <Summary summary={summary} />
-      <Reports transactions={transactions} />
+      <Summary transactions={transactions} />
+      <Reports transactions={transactions} handleDelete={handleDelete} />
     </main>
   );
 }

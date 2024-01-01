@@ -57,17 +57,18 @@ function EnterTransitions({ onFormSubmit }) {
   const handleTransactionType = (value) =>
     setFormat({ ...format, transactionType: value });
   const handleTitle = (value) => setFormat({ ...format, title: value });
-  const handleAmount = (value) => setFormat({ ...format, amount: value });
+  const handleAmount = (value) =>
+    setFormat({ ...format, amount: parseInt(value, 10) || 0 });
 
   const handleSubmit = (event) => {
-    toast("Event has been created", {
-      description: `${format.title} - ${format.amount} has been recorded`,
-      // action: {
-      //   label: "Undo",
-      //   onClick: () => console.log("Undo"),
-      // },
-    });
     event.preventDefault();
+    toast("Transaction has been created", {
+      description: `${format.title} - ${format.amount} has been recorded`,
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      },
+    });
     onFormSubmit(format);
     resetForm();
   };

@@ -10,7 +10,7 @@ import {
   Table,
 } from "./ui/table";
 
-function Reports({ transactions }) {
+function Reports({ transactions, handleDelete }) {
   return (
     <>
       <h2 className="text-xl font-semibold text-left">Reports</h2>
@@ -30,7 +30,6 @@ function Reports({ transactions }) {
                 <TableRow key={transaction.id}>
                   <TableCell>{transaction.date}</TableCell>
                   <TableCell>{transaction.title}</TableCell>
-                  {/* <TableCell className="text-rose-500">${transaction.amount}</TableCell> */}
                   <TableCell
                     className={`${
                       transaction.transactionType === "expense"
@@ -41,7 +40,11 @@ function Reports({ transactions }) {
                     ${transaction.amount}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="icon" variant="destructive">
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      onClick={() => handleDelete(transaction.id)}
+                    >
                       <Trash strokeWidth={1} size={24} className="text-white" />
                       <span className="sr-only">Delete</span>
                     </Button>
