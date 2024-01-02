@@ -1,3 +1,6 @@
+"use client";
+
+import { useStore } from "../lib/store";
 import { Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { CardContent, Card } from "./ui/card";
@@ -10,7 +13,17 @@ import {
   Table,
 } from "./ui/table";
 
-function Reports({ transactions }) {
+function Reports() {
+  const transactions = useStore((state) => state.transactions);
+  const setTransactions = useStore((state) => state.setTransactions);
+
+  const handleDelete = (id) => {
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction.id !== id
+    );
+    setTransactions(updatedTransactions);
+  };
+
   return (
     <>
       <h2 className="text-xl font-semibold text-left">Reports</h2>
@@ -30,7 +43,6 @@ function Reports({ transactions }) {
                 <TableRow key={transaction.id}>
                   <TableCell>{transaction.date}</TableCell>
                   <TableCell>{transaction.title}</TableCell>
-                  {/* <TableCell className="text-rose-500">${transaction.amount}</TableCell> */}
                   <TableCell
                     className={`${
                       transaction.transactionType === "expense"
@@ -41,7 +53,11 @@ function Reports({ transactions }) {
                     ${transaction.amount}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="icon" variant="destructive">
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      onClick={() => handleDelete(transaction.id)}
+                    >
                       <Trash strokeWidth={1} size={24} className="text-white" />
                       <span className="sr-only">Delete</span>
                     </Button>

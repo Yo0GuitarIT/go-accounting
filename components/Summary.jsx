@@ -1,6 +1,36 @@
-import { CardContent, Card, CardDescription, CardTitle } from "./ui/card";
+"use client"
 
-function Summary({summary}) {
+import { CardContent, Card, CardDescription, CardTitle } from "./ui/card";
+import { useState, useEffect } from "react";
+import { useStore } from "../lib/store";
+
+function Summary() {
+const transactions = useStore((state)=>state.transactions);
+
+  const [summary, setSummary] = useState({
+    totalTransactions: 0,
+    totalAmount: 0,
+  });
+
+  const calculateTotalAmount = () => {
+    const sum = transactions.reduce((total, transaction) => {
+      return transaction.transactionType === "income"
+        ? total + transaction.amount
+        : total - transaction.amount;
+    }, 0);
+
+    return sum;
+  };
+
+  useEffect(() => {
+    const totalAmount = calculateTotalAmount();
+    setSummary({
+      totalTransactions: transactions.length,
+      totalAmount: totalAmount,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactions]);
+
   return (
     <>
       <h2 className="text-xl font-semibold text-left">Summary</h2>

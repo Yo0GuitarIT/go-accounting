@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useStore } from "../lib/store";
 import { CardContent, Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -12,7 +15,10 @@ import {
   SelectValue,
 } from "./ui/select";
 
-function EnterTransitions({ onFormSubmit }) {
+function EnterTransitions() {
+  const transactions = useStore((state) => state.transactions);
+  const setTransactions = useStore((state) => state.setTransactions);
+
   const [format, setFormat] = useState({
     id: "",
     date: "",
@@ -57,18 +63,19 @@ function EnterTransitions({ onFormSubmit }) {
   const handleTransactionType = (value) =>
     setFormat({ ...format, transactionType: value });
   const handleTitle = (value) => setFormat({ ...format, title: value });
-  const handleAmount = (value) => setFormat({ ...format, amount: value });
+  const handleAmount = (value) =>
+    setFormat({ ...format, amount: parseInt(value, 10) || 0 });
 
   const handleSubmit = (event) => {
-    toast("Event has been created", {
-      description: `${format.title} - ${format.amount} has been recorded`,
-      // action: {
-      //   label: "Undo",
-      //   onClick: () => console.log("Undo"),
-      // },
-    });
     event.preventDefault();
-    onFormSubmit(format);
+    toast("Transaction has been created", {
+      description: `${format.title} - ${format.amount} has been recorded`,
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      },
+    });
+    setTransactions([...transactions, format]);
     resetForm();
   };
 
