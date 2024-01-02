@@ -1,7 +1,12 @@
+"use client"
+
 import { CardContent, Card, CardDescription, CardTitle } from "./ui/card";
 import { useState, useEffect } from "react";
+import { useStore } from "../lib/store";
 
-function Summary({ transactions }) {
+function Summary() {
+const transactions = useStore((state)=>state.transactions);
+
   const [summary, setSummary] = useState({
     totalTransactions: 0,
     totalAmount: 0,

@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useStore } from "../lib/store";
 import { CardContent, Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -12,7 +15,10 @@ import {
   SelectValue,
 } from "./ui/select";
 
-function EnterTransitions({ onFormSubmit }) {
+function EnterTransitions() {
+  const transactions = useStore((state) => state.transactions);
+  const setTransactions = useStore((state) => state.setTransactions);
+
   const [format, setFormat] = useState({
     id: "",
     date: "",
@@ -69,7 +75,7 @@ function EnterTransitions({ onFormSubmit }) {
         onClick: () => console.log("Close"),
       },
     });
-    onFormSubmit(format);
+    setTransactions([...transactions, format]);
     resetForm();
   };
 

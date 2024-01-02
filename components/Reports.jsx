@@ -1,3 +1,6 @@
+"use client";
+
+import { useStore } from "../lib/store";
 import { Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { CardContent, Card } from "./ui/card";
@@ -10,7 +13,17 @@ import {
   Table,
 } from "./ui/table";
 
-function Reports({ transactions, handleDelete }) {
+function Reports() {
+  const transactions = useStore((state) => state.transactions);
+  const setTransactions = useStore((state) => state.setTransactions);
+
+  const handleDelete = (id) => {
+    const updatedTransactions = transactions.filter(
+      (transaction) => transaction.id !== id
+    );
+    setTransactions(updatedTransactions);
+  };
+
   return (
     <>
       <h2 className="text-xl font-semibold text-left">Reports</h2>
