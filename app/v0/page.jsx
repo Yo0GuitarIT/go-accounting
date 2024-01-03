@@ -4,11 +4,11 @@ import Reports from "../../components/Reports";
 
 function AccountingPage() {
   return (
-    <main className="h-full w-full flex flex-col gap-6 pb-6">
-      <h2 className="text-xl font-semibold text-left">Enter Transactions</h2>
-
-      <EnterTransactions />
-      <Summary />
+    <main className=" container h-full w-full gap-6 pb-6 md:flex block">
+      <div className="md:w-1/2 w-full">
+        <EnterTransactions />
+        <Summary />
+      </div>
       <Reports />
     </main>
   );

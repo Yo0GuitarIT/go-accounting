@@ -25,13 +25,13 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
             <Header />
-            <main className="flex text-center container">
+            <main className="flex text-center md:container">
               <Suspense fallback={<Loading />}>{children}</Suspense>
             </main>
             <Toaster />
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </ClerkProvider> 
   );
 }
