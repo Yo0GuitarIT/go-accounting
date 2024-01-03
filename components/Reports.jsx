@@ -1,5 +1,10 @@
 "use client";
 
+import { useAuth } from "@clerk/nextjs";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../lib/firebaseConfig";
+import { useEffect } from "react";
 import { useStore } from "../lib/store";
 import { Trash } from "lucide-react";
 import { Button } from "./ui/button";
@@ -14,14 +19,62 @@ import {
 } from "./ui/table";
 
 function Reports() {
-  const transactions = useStore((state) => state.transactions);
-  const setTransactions = useStore((state) => state.setTransactions);
+  const { transactions, setTransactions, userId, setUserId } = useStore();
+  const { getToken, destroy } = useAuth();
 
-  const handleDelete = (id) => {
-    const updatedTransactions = transactions.filter(
-      (transaction) => transaction.id !== id
-    );
-    setTransactions(updatedTransactions);
+  const getUID = async () => {
+    const auth = getAuth();
+    const token = await getToken({ template: "integration_firebase" });
+    const userCredentials = await signInWithCustomToken(auth, token);
+    const IdFromDatabase = userCredentials.user.uid;
+    setUserId(IdFromDatabase);
+  };
+
+  useEffect(() => {
+    getUID();
+    return destroy;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const loadData = async () => {
+    if (userId) {
+      const querySnapshot = await getDocs(collection(db, userId));
+      const formatToStore = [];
+      querySnapshot.forEach((doc) => {
+        const id = doc.id;
+        const data = doc.data();
+        const format = {
+          id: id,
+          date: data.date,
+          title: data.title,
+          amount: data.amount,
+          transactionType: data.transactionType,
+        };
+        formatToStore.push(format);
+      });
+      setTransactions(formatToStore);
+    }
+  };
+
+  useEffect(() => {
+    loadData(userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteFromDatabase(id);
+      const updatedTransactions = transactions.filter(
+        (transaction) => transaction.id !== id
+      );
+      setTransactions(updatedTransactions);
+    } catch (error) {
+      console.error("Error deleting from database:", error);
+    }
+  };
+
+  const deleteFromDatabase = async (id) => {
+    await deleteDoc(doc(db, userId, id));
   };
 
   return (
