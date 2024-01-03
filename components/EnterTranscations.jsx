@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { db } from "../lib/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 import { useStore } from "../lib/store";
 import { CardContent, Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-
 import {
   Select,
   SelectContent,
@@ -15,10 +16,35 @@ import {
   SelectValue,
 } from "./ui/select";
 
-function EnterTransitions() {
-  const transactions = useStore((state) => state.transactions);
-  const setTransactions = useStore((state) => state.setTransactions);
+const generateRandomId = () => {
+  const prefix = "XXX";
+  const randomPart = Math.floor(Math.random() * 1000000)
+    .toString()
+    .padStart(6, "0");
+  return prefix + randomPart;
+};
 
+const getCurrentDateWithTime = () => {
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+  const currentDateTime = new Date().toLocaleString("en-US", options);
+  return currentDateTime;
+};
+
+const getIDandDate = () => {
+  const transactionID = generateRandomId();
+  const currentDate = getCurrentDateWithTime();
+  return { transactionID, currentDate };
+};
+
+function EnterTranscations() {
+  const { transactions, setTransactions, userId } = useStore();
   const [format, setFormat] = useState({
     id: "",
     date: "",
@@ -27,38 +53,20 @@ function EnterTransitions() {
     transactionType: "",
   });
 
-  const generateRandomId = () => {
-    const prefix = "XXX";
-    const randomPart = Math.floor(Math.random() * 1000000)
-      .toString()
-      .padStart(6, "0");
-    return prefix + randomPart;
-  };
-
-  const getCurrentDateWithTime = () => {
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: false,
-    };
-    const currentDateTime = new Date().toLocaleString("en-US", options);
-    return currentDateTime;
-  };
-
-  const getIDandDate = () => {
-    const transactionID = generateRandomId();
-    const currentDate = getCurrentDateWithTime();
-    return { transactionID, currentDate };
-  };
-
   useEffect(() => {
     const { transactionID, currentDate } = getIDandDate();
     setFormat({ ...format, id: transactionID, date: currentDate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const sentDataToDB = async (userId, format) => {
+    try {
+      const docRef = await addDoc(collection(db, userId), format);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   const handleTransactionType = (value) =>
     setFormat({ ...format, transactionType: value });
@@ -66,8 +74,9 @@ function EnterTransitions() {
   const handleAmount = (value) =>
     setFormat({ ...format, amount: parseInt(value, 10) || 0 });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    await sentDataToDB(userId, format);
     toast("Transaction has been created", {
       description: `${format.title} - ${format.amount} has been recorded`,
       action: {
@@ -75,7 +84,7 @@ function EnterTransitions() {
         onClick: () => console.log("Close"),
       },
     });
-    setTransactions([...transactions, format]);
+    setTransactions([format, ...transactions]);
     resetForm();
   };
 
@@ -130,4 +139,4 @@ function EnterTransitions() {
   );
 }
 
-export default EnterTransitions;
+export default EnterTranscations;

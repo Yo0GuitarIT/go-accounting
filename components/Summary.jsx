@@ -18,7 +18,6 @@ const transactions = useStore((state)=>state.transactions);
         ? total + transaction.amount
         : total - transaction.amount;
     }, 0);
-
     return sum;
   };
 
