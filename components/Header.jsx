@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UserButton, auth } from "@clerk/nextjs";
 import { ModeToggle } from "./ModeToggle";
+import { ClipboardEdit } from "lucide-react";
 
 export function Header() {
   const { userId } = auth();
@@ -8,24 +9,15 @@ export function Header() {
   return (
     <nav className="w-full h-20  flex justify-center">
       <div className="container flex justify-between items-center ">
-        <Link href="/" className=" text-xl font-bold">
-          Go Accounting!
-        </Link>
+        <div className="flex gap-1">
+          <ClipboardEdit strokeWidth={1.5} />
+          <Link href="/" className=" text-xl font-bold">
+            Go Accounting!
+          </Link>
+        </div>
 
         <div className="flex items-center gap-5">
-          {!userId && (
-            <>
-              <Link href="/sign-up">Sign up</Link>
-              <Link href="/sign-in">Sign in</Link>
-            </>
-          )}
-
-          {userId && (
-            <>
-              <UserButton afterSignOutUrl="/" />
-            </>
-          )}
-
+          {userId && <UserButton afterSignOutUrl="/" />}
           <ModeToggle />
         </div>
       </div>

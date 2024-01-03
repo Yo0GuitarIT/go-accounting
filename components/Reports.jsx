@@ -9,6 +9,7 @@ import { useStore } from "../lib/store";
 import { Trash } from "lucide-react";
 import { Button } from "./ui/button";
 import { CardContent, Card } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 import {
   TableHead,
   TableRow,
@@ -19,7 +20,8 @@ import {
 } from "./ui/table";
 
 function Reports() {
-  const { transactions, setTransactions, userId, setUserId } = useStore();
+  const { transactions, setTransactions, userId, setUserId, show, setShow } =
+    useStore();
   const { getToken, destroy } = useAuth();
 
   const getUID = async () => {
@@ -53,6 +55,7 @@ function Reports() {
         formatToStore.push(format);
       });
       setTransactions(formatToStore);
+      setShow(true);
     }
   };
 
@@ -78,8 +81,8 @@ function Reports() {
   };
 
   return (
-    <>
-      <h2 className="text-xl font-semibold text-left">Reports</h2>
+    <div className="flex flex-col md:w-1/2 w-full ">
+      <h2 className="text-xl font-semibold text-left md:mb-6 my-6">Reports</h2>
       <Card>
         <CardContent>
           <Table>
@@ -91,7 +94,23 @@ function Reports() {
                 <TableHead />
               </TableRow>
             </TableHeader>
-            <TableBody className="text-left">
+            <TableBody className="text-left ">
+              {!show && (
+                <TableRow>
+                  <TableCell>
+                    <Skeleton className="h-4 w-[250px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-[250px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-[250px]" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-[250px]" />
+                  </TableCell>
+                </TableRow>
+              )}
               {transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell>{transaction.date}</TableCell>
@@ -121,7 +140,7 @@ function Reports() {
           </Table>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
 
