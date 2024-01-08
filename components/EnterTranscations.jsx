@@ -102,7 +102,9 @@ function EnterTranscations() {
 
   return (
     <>
-      <h2 className="text-xl font-semibold text-left mb-6">Enter Transactions</h2>
+      <h2 className="text-xl font-semibold text-left mb-6">
+        Enter Transactions
+      </h2>
       <Card>
         <CardContent>
           <form className="grid gap-4 pt-6">

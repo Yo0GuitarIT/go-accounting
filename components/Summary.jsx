@@ -35,7 +35,7 @@ function Summary() {
             <CardDescription>Total Transactions</CardDescription>
             {!show && (
               <CardTitle>
-                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[100px]" />
               </CardTitle>
             )}
             {show && <CardTitle>{summary.totalTransactions}</CardTitle>}
@@ -44,7 +44,7 @@ function Summary() {
             <CardDescription>Total Amount</CardDescription>
             {!show && (
               <CardTitle>
-                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[100px]" />
               </CardTitle>
             )}
             {show && <CardTitle>{summary.totalAmount}</CardTitle>}

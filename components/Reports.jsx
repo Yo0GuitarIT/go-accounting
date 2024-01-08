@@ -98,16 +98,16 @@ function Reports() {
               {!show && (
                 <TableRow>
                   <TableCell>
-                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[100px]" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[100px]" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[100px]" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[100px]" />
                   </TableCell>
                 </TableRow>
               )}
